@@ -142,8 +142,8 @@ function drawn(e){return e.drills.filter(function(d){return d.s.length;}).length
 function renderHome(){cur=null;drawIdx=-1;sortE();var ym=today().slice(0,7),mon=entries.filter(function(e){return(e.date||'').slice(0,7)===ym;}).length,dr=0;entries.forEach(function(e){dr+=drawn(e);});
 var h='<div class="home"><header class="cover"><p class="school">KYUNG HEE MIDDLE SCHOOL<br>ICE HOCKEY TEAM</p><img class="seal" src="'+SEAL_WHITE+'" alt="경희 로고"><div id="pn">'+coverName()+'</div><h1>ICE HOCKEY<br>TRAINING JOURNAL</h1><p class="year">SEASON '+today().slice(0,4)+'</p></header><section class="sheet">';
 h+='<div class="sum"><div><b>'+entries.length+'</b><span>총 훈련</span></div><div><b>'+mon+'</b><span>이번 달</span></div><div><b>'+dr+'</b><span>그린 드릴</span></div></div>';
-if(entries.length){h+='<ul class="list">'+entries.map(function(e){var d=e.date||'';return'<li data-id="'+esc(e.id)+'" tabindex="0"><div class="dt"><b>'+esc(d.slice(8,10))+'</b><span>'+(MON[+d.slice(5,7)-1]||'')+'</span></div><div class="lm"><strong>'+esc(e.topic||'제목 없는 훈련')+'</strong><span>'+esc([e.place,e.coach?e.coach+' 코치':''].filter(Boolean).join(' / ')||fmtDate(d))+'</span></div><span class="chip">'+esc(typeName(e.type))+'</span></li>';}).join('')+'</ul>';}
-else h+='<div class="empty"><b>첫 페이지를 채워볼까요?</b>링크 위에 드릴을 그리고, 코치 피드백을 적어 보세요.</div>';
+if(entries.length){h+='<ul class="list">'+entries.map(function(e){var d=e.date||'';return'<li data-id="'+esc(e.id)+'" tabindex="0"><div class="dt"><b>'+esc(d.slice(8,10))+'</b><span>'+(MON[+d.slice(5,7)-1]||'')+'</span></div><div class="lm"><strong>'+esc(e.topic||'제목 없는 훈련')+'</strong><span>'+esc(fmtDate(d))+'</span></div><span class="chip">'+esc(typeName(e.type))+'</span></li>';}).join('')+'</ul>';}
+else h+='<div class="empty"><b>첫 페이지를 채워볼까요?</b>링크 위에 드릴을 그리고, 피드백을 적어 보세요.</div>';
 h+='<div class="backup"><button data-act="export">백업 내보내기</button><button data-act="import">백업 불러오기</button></div><input type="file" id="imp" accept="application/json,.json" hidden><div class="player"><label>선수 이름<input data-p="name" value="'+esc(player.name)+'" placeholder="예: 고도현 또는 DEREK" autocomplete="off"></label><label>등번호<input data-p="num" value="'+esc(player.num)+'" inputmode="numeric" maxlength="3" placeholder="15"></label></div>'+fontSeg()+installHtml()+'<p class="note">기록은 이 휴대폰에만 저장돼요. 한 달에 한 번 백업 파일을 iCloud나 구글 드라이브에 저장해 두세요.</p></section></div><button class="fab" data-act="new">새 훈련 일지</button>';
 app.innerHTML=h;window.scrollTo(0,0);}
 /* editor */
@@ -152,8 +152,8 @@ function renderEditor(e){cur=e;drawIdx=-1;
 var h='<div class="bar"><button data-act="back">목록</button><span class="st" id="st">저장됨</span><select data-act-font aria-label="글씨체">'+Object.keys(FONTS).map(function(k){return'<option value="'+k+'"'+(font===k?' selected':'')+'>'+FONTS[k].n+'</option>';}).join('')+'</select><button class="go" data-act="png">이미지 저장</button></div><article class="page"><img class="pseal" src="'+SEAL_RED+'" alt="경희 로고"><div class="hdr">';
 h+='<div class="hl"><input type="date" data-f="date" value="'+esc(e.date)+'" aria-label="날짜"><select data-f="type" aria-label="훈련 종류">'+TYPES.map(function(t){return'<option value="'+t[0]+'"'+(e.type===t[0]?' selected':'')+'>'+t[1]+'</option>';}).join('')+'</select></div>';
 h+='<div class="hl"><input class="topic" data-f="topic" value="'+esc(e.topic)+'" placeholder="오늘의 훈련 주제" aria-label="훈련 주제"></div>';
-h+='<div class="hl"><input data-f="place" value="'+esc(e.place)+'" placeholder="장소" aria-label="장소"><input data-f="coach" value="'+esc(e.coach)+'" placeholder="코치" aria-label="코치"></div></div>';
-e.drills.forEach(function(d,i){h+='<section class="drill"><div class="dh"><span class="dn">DRILL 0'+(i+1)+'</span><input data-d="'+i+'" data-k="t" value="'+esc(d.t)+'" placeholder="드릴 이름" aria-label="드릴 '+(i+1)+' 이름"></div><div class="dwrap"><div><div class="rink" data-i="'+i+'"><canvas aria-label="드릴 '+(i+1)+' 링크 그림"></canvas><button class="pen" data-act="draw" data-i="'+i+'">그리기</button></div><div class="tools" data-i="'+i+'" hidden></div></div><textarea class="notes" data-d="'+i+'" data-k="n" placeholder="포인트, 코치 피드백, 느낀 점" aria-label="드릴 '+(i+1)+' 메모">'+esc(d.n)+'</textarea></div></section>';});
+h+='</div>';
+e.drills.forEach(function(d,i){h+='<section class="drill"><div class="dh"><span class="dn">DRILL 0'+(i+1)+'</span><input data-d="'+i+'" data-k="t" value="'+esc(d.t)+'" placeholder="드릴 이름" aria-label="드릴 '+(i+1)+' 이름"></div><div class="dwrap"><div><div class="rink" data-i="'+i+'"><canvas aria-label="드릴 '+(i+1)+' 링크 그림"></canvas><button class="pen" data-act="draw" data-i="'+i+'">그리기</button></div><div class="tools" data-i="'+i+'" hidden></div></div><textarea class="notes" data-d="'+i+'" data-k="n" placeholder="포인트, 피드백, 느낀 점" aria-label="드릴 '+(i+1)+' 메모">'+esc(d.n)+'</textarea></div></section>';});
 h+='<div class="brand"><small>ICE HOCKEY</small><b>KYUNG HEE</b><small>MIDDLE SCHOOL</small></div></article><button class="del" data-act="delete">이 일지 삭제</button>';
 app.innerHTML=h;window.scrollTo(0,0);
 [0,1,2].forEach(setupRink);app.querySelectorAll('.notes').forEach(grow);}
@@ -201,10 +201,10 @@ var W=1240,H=1754,c=document.createElement('canvas');c.width=W;c.height=H;var x=
 x.fillStyle='#fff';x.fillRect(0,0,W,H);
 try{x.drawImage(sealImg,1030,84,150,146);}catch(err){}
 if(playerLine()){x.fillStyle=RED;x.font='900 30px "Noto Serif KR",serif';x.fillText(playerLine(),80,84);}
-x.strokeStyle=INK;x.lineWidth=2;[150,220,290].forEach(function(y){x.beginPath();x.moveTo(80,y);x.lineTo(990,y);x.stroke();});
+x.strokeStyle=INK;x.lineWidth=2;[150,220].forEach(function(y){x.beginPath();x.moveTo(80,y);x.lineTo(990,y);x.stroke();});
 x.fillStyle=INK;x.font='400 28px "Noto Sans KR",sans-serif';x.fillText(fmtDate(e.date)+'   '+typeName(e.type),86,138);
 x.font='700 36px "Noto Serif KR",serif';x.fillText(e.topic||'',86,208);
-x.font='400 28px "Noto Sans KR",sans-serif';x.fillText([e.place,e.coach?e.coach+' 코치':''].filter(Boolean).join('   /   '),86,278);
+
 e.drills.forEach(function(d,i){var y0=360+i*440,rw=620,rh=rw*113/200;
  x.fillStyle=RED;x.font='900 22px "Noto Serif KR",serif';x.fillText('DRILL 0'+(i+1),80,y0-14);x.fillStyle=INK;x.font=FONTS[font].cv.replace(/\d+px/,function(m){return Math.round(parseInt(m)*.85)+'px';});x.fillText(d.t||'',230,y0-14);
  drawRink(x,80,y0,rw,INK,'#E3E3E3');x.save();x.translate(80,y0);d.s.forEach(function(st){drawStroke(x,st,rw,rh,4.6,st.c==='r'?RED:st.c==='b'?'#1C4FB8':INK);});x.restore();
